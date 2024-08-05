@@ -1,7 +1,3 @@
-Here’s a more detailed README that explains what SeaJS does and provides a thorough overview of the codebase:
-
----
-
 # SeaJS
 
 ## Overview
