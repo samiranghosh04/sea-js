@@ -1,0 +1,78 @@
+/* Basic reset */
+body, h1, h2, h6, button {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Basic layout styles */
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #3783ff, #c2e9fb); /* Gradient background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrolling */
+}
+#root {
+  background: rgba(255, 255, 255, 0.181); /* Semi-transparent background */
+  border-radius: 15px;
+  backdrop-filter: blur(10px); /* Glassmorphism effect */
+  -webkit-backdrop-filter: blur(10px); /* Glassmorphism effect for Safari */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  padding: 20px;
+  width: 320px;
+  text-align: center;
+}
+
+/* Header styles */
+h1 {
+  font-size: 24px;
+  color:  rgb(0, 25, 125); /* White text for contrast */
+  margin-bottom: 10px;
+}
+
+h6 {
+  font-size: 16px;
+  color: rgb(0, 25, 125); /* Slightly lighter color */
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 20px;
+  color:  rgb(0, 25, 125); /* White text for contrast */
+  margin-bottom: 20px;
+}
+
+/* Button styling */
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background: rgb(0, 25, 125); /* Semi-transparent button */
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 5px;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  background: rgba(0, 25, 125, 0.716); /* Solid color on hover */
+  transform: scale(1.05); /* Slight scale effect */
+}
+
+/* Animation styles */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fade-in 1s ease-in-out;
+}
