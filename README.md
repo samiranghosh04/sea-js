@@ -19,6 +19,10 @@ To use SeaJS, you need to include the built JavaScript file in your project. The
 npm install sea-js
 ```
 
+```sh
+As of 6th August 00:37 (IST) the framework isnt published on npm yet. That would be happening before 14th. Until then just fork and clone the repo, and hit npm i to install the dev dependencies and then use npm link to try it out.
+```
+
 ## Basic Usage
 
 ### **Creating a Component**
