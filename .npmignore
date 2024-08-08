@@ -1,31 +1,24 @@
-# Ignore source files
-src/
-# Ignore configuration files
-.rollup.config.js
-.babelrc
-# Ignore tests and documentation
+# Dependency directories
+node_modules/
+
+# Build directories
+dist/
+build/
+
+# Test directories
+coverage/
 test/
 tests/
-*.test.js
-*.spec.js
-*.md
-# Ignore build artifacts
-*.log
-stats.html
-# Ignore local environment files
-.env
-*.env
-# Ignore version control directories
-.git/
-.gitignore
-# Ignore CI/CD configuration files
-.circleci/
-.github/
-.gitlab-ci.yml
-# LICENSE and other md files
-LICENSE
-CODE_OF_CONDUCT.md
-CONTRIBUTING.md
 
-#vite config
-vite.config.js
+# Configuration files
+*.env
+*.log
+*.md
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/

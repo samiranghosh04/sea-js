@@ -27,5 +27,3 @@ function CounterComponent(state, setState) {
   `;
 }
 createComponent(CounterComponent, { count: 0 });
-
-  

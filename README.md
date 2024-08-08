@@ -16,7 +16,7 @@
 To use SeaJS, you need to include the built JavaScript file in your project. The framework is published on npm, so you can install it using:
 
 ```sh
-npm install sea-js
+npm i sea-js-ui-core
 ```
 
 ```sh
