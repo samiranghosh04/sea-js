@@ -1,6 +1,6 @@
 {
   "name": "sea-js-ui-core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The smallest UI framework",
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.esm.js",
