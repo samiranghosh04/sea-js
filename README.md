@@ -1,15 +1,15 @@
-# SeaJS
+# SeaJS - The 1kB FE Framework
 
 ## Overview
 
-**SeaJS** is a lightweight, frontend JavaScript framework designed for building web applications with minimal overhead. It offers a simple API for component-based development, state management, and signal handling. SeaJS focuses on performance and bundle size efficiency, making it ideal for projects where every kilobyte matters.
+**SeaJS** is a lightweight, frontend JavaScript framework designed for building web applications with minimal overhead. It offers a simple API for component-based development, state management, and signal handling. SeaJS focuses on performance and bundle size efficiency, making it ideal for projects where every kilobyte matters. As of now the bundle size is a mere 1.01kB.
 
 ## Key Features
 
 - **Component-Based Architecture**: Create and manage UI components easily.
 - **State Management**: Efficiently manage and update application state.
 - **Signal System**: Handle events and communication between different parts of the application.
-- **Minimal Bundle Size**: Designed to be compact and performant.
+- **Minimal Bundle Size**: Designed to be compact and performant. With a bundle size of just ***1.01kB*** SeaJS is now the world's smallest frontend framework!
 
 ## Installation
 
