@@ -13,7 +13,7 @@
 
 ## Installation
 
-As of 6th August 00:37 (IST) the framework isnt published on npm yet. That would be happening before 14th. Until then just fork and clone the repo, and hit npm i to install the dev dependencies and then use npm link to try it out.
+As of 6th August 00:37 (IST) the framework isnt published on npm yet. Until then just fork and clone the repo, and hit npm i to install the dev dependencies and then use npm link to try it out.
 
 ## Basic Usage
 
