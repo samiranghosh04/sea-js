@@ -1,8 +1,8 @@
-# SeaJS - The 290B FE Framework
+# SeaJS - The 290 B FE Framework
 
 ## Overview
 
-**SeaJS** is a lightweight, frontend JavaScript framework designed for building web applications with minimal overhead. It offers a simple API for component-based development, state management, and signal handling. SeaJS focuses on performance and bundle size efficiency, making it ideal for projects where every kilobyte matters. As of now the bundle size is a mere 290B.
+**SeaJS** is a lightweight, frontend JavaScript framework designed for building web applications with minimal overhead. It offers a simple API for component-based development, state management, and signal handling. SeaJS focuses on performance and bundle size efficiency, making it ideal for projects where every kilobyte matters. As of now the bundle size is a mere 290 B.
 
 ## Key Features
 
