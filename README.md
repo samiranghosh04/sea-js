@@ -1,15 +1,15 @@
-# SeaJS - The 290 B FE Framework
+# SeaJS - The 245 Byte FE Framework
 
 ## Overview
 
-**SeaJS** is a lightweight, frontend JavaScript framework designed for building web applications with minimal overhead. It offers a simple API for component-based development, state management, and signal handling. SeaJS focuses on performance and bundle size efficiency, making it ideal for projects where every kilobyte matters. As of now the bundle size is a mere 290 B.
+**SeaJS** is a lightweight, frontend JavaScript framework designed for building web applications with minimal overhead. It offers a simple API for component-based development, state management, and signal handling. SeaJS focuses on performance and bundle size efficiency, making it ideal for projects where every kilobyte matters. As of now the bundle size is a mere 245 Bytes!
 
 ## Key Features
 
 - **Component-Based Architecture**: Create and manage UI components easily.
 - **State Management**: Efficiently manage and update application state.
 - **Signal System**: Handle events and communication between different parts of the application.
-- **Minimal Bundle Size**: Designed to be compact and performant. With a bundle size of just ***under 290 B (0.28 KB)*** SeaJS is now the world's smallest frontend framework!
+- **Minimal Bundle Size**: Designed to be compact and performant. With a bundle size of just ***under 245 B*** SeaJS is the world's smallest frontend framework!
 
 ## Installation and Setup
 
@@ -85,19 +85,17 @@ import { createComponent } from "sea-js-ui-core";
 function CounterComponent(state, setState) {
   function increment() {
     setState({ count: state.count + 1 });
+    console.log(state.count + 1);
   }
   function decrement() {
     setState({ count: state.count - 1 });
+    console.log(state.count - 1);
   }
   function notifySignal() {
     signals.emit('countUpdated', { count: state.count });
   }
   window.increment = increment;
   window.decrement = decrement;
-  window.notifySignal = notifySignal;
-  signals.subscribe('countUpdated', (data) => {
-    console.log('Count updated to:', data.count);
-  });
   return `
     <div>
       <h1>Welcome to SeaJS!</h1>
@@ -105,7 +103,6 @@ function CounterComponent(state, setState) {
       <h2>Count: ${state.count}</h2>
       <button onclick="increment()">Increment</button>
       <button onclick="decrement()">Decrement</button>
-      <button onclick="notifySignal()">Notify Signal</button>
     </div>
   `;
 }
@@ -143,23 +140,15 @@ import { createComponent } from "sea-js";
 function CounterComponent(state, setState) {
   function increment() {
     setState({ count: state.count + 1 });
+    console.log(state.count + 1);
   }
   function decrement() {
     setState({ count: state.count - 1 });
+    console.log(state.count - 1);
   }
-  function notifySignal() {
-    signals.emit('countUpdated', { count: state.count });
-  }
-
   // Expose functions to the global scope
   window.increment = increment;
   window.decrement = decrement;
-  window.notifySignal = notifySignal;
-
-  // Subscribe to signal
-  signals.subscribe('countUpdated', (data) => {
-    console.log('Count updated to:', data.count);
-  });
 
   return `
     <div>
@@ -168,7 +157,6 @@ function CounterComponent(state, setState) {
       <h2>Count: ${state.count}</h2>
       <button onclick="increment()">Increment</button>
       <button onclick="decrement()">Decrement</button>
-      <button onclick="notifySignal()">Notify Signal</button>
     </div>
   `;
 }
@@ -178,28 +166,7 @@ createComponent(CounterComponent, { count: 0 });
 
 ## Core Features
 
-### 1. **Signal Handling**
-
-SeaJS includes a simple signal system for managing events and communication:
-
-```javascript
-window.signals = {
-  listeners: {},
-  subscribe(signalName, callback) {
-    if (!this.listeners[signalName]) {
-      this.listeners[signalName] = [];
-    }
-    this.listeners[signalName].push(callback);
-  },
-  emit(signalName, data) {
-    if (this.listeners[signalName]) {
-      this.listeners[signalName].forEach(callback => callback(data));
-    }
-  }
-};
-```
-
-### 2. **State Management**
+### 1. **State Management**
 
 SeaJS provides a basic store for managing application state:
 
@@ -227,7 +194,7 @@ class Store {
 window.store = new Store();
 ```
 
-### 3. **The Create Components Function**
+### 2. **The Create Components Function**
 
 The `createComponent` function initializes a component with a given initial state and renders it:
 
@@ -245,6 +212,8 @@ export function createComponent(componentFn, initialState) {
   window.store.subscribe(render);
 }
 ```
+
+Note - Signals have been removed for now, because of a bug and due to the TC39 Proposal integrating Signals into JS
 
 ## Codebase Overview
 

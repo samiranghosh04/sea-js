@@ -1,18 +1,3 @@
-window.signals = {
-  listeners: {},
-  subscribe(signalName, callback) {
-    if (!this.listeners[signalName]) {
-      this.listeners[signalName] = [];
-    }
-    this.listeners[signalName].push(callback);
-  },
-  emit(signalName, data) {
-    if (this.listeners[signalName]) {
-      this.listeners[signalName].forEach(callback => callback(data));
-    }
-  }
-};
-
 class Store {
   constructor(initialState = {}) {
     this.state = initialState;
@@ -33,7 +18,6 @@ class Store {
   }
 }
 window.store = new Store();
-
 export function createComponent(componentFn, initialState) {
   window.store.setState(initialState);
   function render() {
