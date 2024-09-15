@@ -6,16 +6,43 @@
 
 ## Key Features
 
-- **Component-Based Architecture**: Create and manage UI components easily.
 - **State Management**: Efficiently manage and update application state.
-- **Signal System**: Handle events and communication between different parts of the application.
 - **Minimal Bundle Size**: Designed to be compact and performant. With a bundle size of just ***under 245 B*** SeaJS is the world's smallest frontend framework!
 
 ## Installation and Setup
 
-Currently, Sea JS doesn't comes with a CLI that automatically installs everything you need and creates a starter app for you. It is in works but for now you have to do it yourself. Please follow these steps to get started with using the framework in your project.
+### Installation via the brand new CLI
 
-### 1. Initialize a Node.js Project
+Sea JS now comes with a new basic CLI called the `create-sea-app`. You can check it out here on [GitHub](https://github.com/samiranghosh04/create-sea-app) or [npm](https://www.npmjs.com/package/create-sea-app). This is recommended for people new to web dev/ people who want a quick starter app. You can use it either via npx or globally install it -
+
+#### Using `npx`
+You can use the CLI without installing it globally by running:
+
+```bash
+npx create-sea-app <project-name>
+```
+
+#### Global Installation
+
+To install the CLI globally:
+
+```bash
+npm install -g create-sea-app
+```
+
+#### Usage
+
+After installation, you can use the CLI to create a new project:
+
+```bash
+create-sea-app <project-name>
+```
+
+Replace `<project-name>` with  the name of your project.
+
+### Installation and Setup in the Traditional Way
+
+#### 1. Initialize a Node.js Project
 
 First, you need to set up a Node.js project. In your terminal, navigate to the folder where you want to create the project and run:
 
@@ -25,7 +52,7 @@ npm init -y
 
 This will create a `package.json` file in your project folder, initializing the Node.js project.
 
-### 2. Install the Framework
+#### 2. Install the Framework
 
 Once your project is initialized, install the framework from npm:
 
@@ -35,7 +62,7 @@ npm i sea-js-ui-core
 
 This will add the framework to your project dependencies.
 
-### 3. Setup a Module Bundler
+#### 3. Setup a Module Bundler
 
 To bundle your application, you’ll need to set up a module bundler. We recommend using **Vite** for fast builds and hot reloading. You can install and configure Vite by running the following commands:
 
@@ -54,7 +81,7 @@ Update the `package.json` under the `"scripts"` section. Here is how you do it i
   },
 ```
 
-### 4. Create an `index.html` File
+#### 4. Create an `index.html` File
 
 In the root of your project folder, create an `index.html` file that will serve as the entry point for your application. Add the following basic HTML structure:
 
@@ -73,7 +100,7 @@ In the root of your project folder, create an `index.html` file that will serve 
 </html>
 ```
 
-### 5. Create the `src/` Folder and `app.js`
+#### 5. Create the `src/` Folder and `app.js`
 
 Next, create a folder called `src` in the root of your project. Inside the `src` folder, create a file called `app.js` where you will write your main application logic.
 
@@ -91,9 +118,6 @@ function CounterComponent(state, setState) {
     setState({ count: state.count - 1 });
     console.log(state.count - 1);
   }
-  function notifySignal() {
-    signals.emit('countUpdated', { count: state.count });
-  }
   window.increment = increment;
   window.decrement = decrement;
   return `
@@ -110,7 +134,7 @@ function CounterComponent(state, setState) {
 createComponent(CounterComponent, { count: 0 });
 ```
 
-### 6. Make sure that `app.js` is properly linked to `index.html`
+#### 6. Make sure that `app.js` is properly linked to `index.html`
 
 Make sure the `<script>` tag in `index.html` correctly links to your `app.js` file. The structure provided above already does this with:
 
@@ -118,12 +142,12 @@ Make sure the `<script>` tag in `index.html` correctly links to your `app.js` fi
 <script type="module" src="/src/app.js"></script>
 ```
 
-### 7. Start the Development Server
+#### 7. Start the Development Server
 
 Now you can run the development server using Vite. Simply run:
 
 ```bash
-npm run dev
+npm start
 ```
 
 That's it! You now have a basic setup with your framework, ready for development.
@@ -146,6 +170,7 @@ function CounterComponent(state, setState) {
     setState({ count: state.count - 1 });
     console.log(state.count - 1);
   }
+
   // Expose functions to the global scope
   window.increment = increment;
   window.decrement = decrement;
