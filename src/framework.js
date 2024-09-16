@@ -1,20 +1,18 @@
+import { BehaviorSubject } from 'rxjs';
 class Store {
   constructor(initialState = {}) {
-    this.state = initialState;
-    this.listeners = [];
+    this.state = new BehaviorSubject(initialState);
   }
   getState() {
-    return this.state;
+    return this.state.getValue();
   }
   setState(newState) {
-    this.state = { ...this.state, ...newState };
-    this.notify();
+    const currentState = this.state.getValue();
+    const updatedState = { ...currentState, ...newState };
+    this.state.next(updatedState);
   }
   subscribe(listener) {
-    this.listeners.push(listener);
-  }
-  notify() {
-    this.listeners.forEach(listener => listener(this.state));
+    return this.state.subscribe(listener);
   }
 }
 window.store = new Store();

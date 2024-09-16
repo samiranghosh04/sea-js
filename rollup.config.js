@@ -5,7 +5,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import visualizer from 'rollup-plugin-visualizer';
 import gzipPlugin from 'rollup-plugin-gzip';
 import brotli from 'rollup-plugin-brotli';
-import analyzer from 'rollup-plugin-analyzer'; // Import rollup-plugin-analyzer
+import analyzer from 'rollup-plugin-analyzer';
 
 export default {
   input: 'src/framework.js',
@@ -21,6 +21,11 @@ export default {
       sourcemap: process.env.NODE_ENV !== 'production',
     },
   ],
+  treeshake: {
+    moduleSideEffects: false,
+    propertyReadSideEffects: false,
+    tryCatchDeoptimization: false,
+  },
   plugins: [
     resolve(),
     commonjs(),
@@ -32,36 +37,47 @@ export default {
         [
           '@babel/preset-env',
           {
-            useBuiltIns: 'usage', // Only include polyfills for the features you use
-            corejs: 3,            // Specify the version of core-js for polyfills
+            useBuiltIns: 'usage',
+            corejs: 3,
             targets: '> 1%, not dead',
             modules: false,
           },
         ],
       ],
     }),
-    terser(
-      {
-        compress: {
-          drop_console: true,   // Remove console.log statements
-          drop_debugger: true,  // Remove debugger statements
-          passes: 2,            // Apply multiple optimization passes
-          pure_funcs: ['console.log'], // Remove specific function calls (like console.log)
+    terser({
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        passes: 3,
+        pure_funcs: ['console.log'],
+        dead_code: true,
+        unused: true,
+        collapse_vars: true,
+        reduce_vars: true,
+        sequences: true,
+        conditionals: true,
+        booleans: true,
+      },
+      mangle: {
+        toplevel: true,
+        properties: {
+          regex: /^_/,
         },
-        mangle: {
-          properties: {
-            regex: /^_/ // Mangle private properties starting with an underscore
-          },
-          toplevel: true, // Mangle top-level variable names
-        },
-        output: {
-          comments: false,  // Remove comments
-        }
-      }
-    ),
-    gzipPlugin(), // Gzip compression
-    brotli(), // Brotli compression
-    visualizer({ open: true, filename: 'stats.html' }), // Visual bundle analyzer
-    analyzer({ summaryOnly: true }), // Rollup plugin analyzer for detailed size analysis
+      },
+      output: {
+        comments: false,
+      },
+      keep_fnames: false,
+      keep_classnames: false,
+    }),
+    gzipPlugin(),
+    brotli(),
+    visualizer({ open: true, filename: 'stats.html', compress: true}),
+    analyzer({ summaryOnly: true,
+      exclude: ['node_modules/**', 'dist/**'],  // Exclude node_modules and dist folders from size analysis
+      statsFilename: 'bundle-stats.json', // Output stats to a JSON file for further analysis and visualization with tools like webpack-bundle-analyzer or rollup-plugin-visualizer-bundle-size-analyzer
+     }),  // Rollup plugin analyzer for detailed size analysis
   ],
+  external: ['rxjs'], 
 };
