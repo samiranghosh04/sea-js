@@ -1,10 +1,13 @@
-# SeaJS - The 235 Byte FE Framework
+# SeaJS - The 209 Byte UI Framework
 
 ## Overview
 
-**SeaJS** is a compact and straightforward frontend JavaScript framework designed to build web applications with minimal overhead. It provides a simple API for DOM manipulation, state management, and signal handling. While SeaJS utilizes the Real DOM, its primary strength lies in its minimalistic approach and exceptionally small bundle size of just 235 bytes. This makes it well-suited for projects where efficiency and a lightweight footprint are crucial. SeaJS aims to deliver a balance between simplicity and functionality, catering to scenarios where performance can be optimized through concise and effective code.
+**SeaJS** is a compact and straightforward frontend JavaScript framework designed to build web applications with minimal overhead. It provides a simple API for DOM manipulation, state management, and signal handling. While SeaJS utilizes the Real DOM, its primary strength lies in its minimalistic approach and exceptionally small bundle size of just 209 bytes. This makes it well-suited for projects where efficiency and a lightweight footprint are crucial. SeaJS aims to deliver a balance between simplicity and functionality, catering to scenarios where performance can be optimized through concise and effective code.
 
-The primary motivation behind Sea JS was to create a simple, efficient, and easy-to-understand framework for managing state and rendering components. I wanted something that could handle basic UI tasks without the overhead of larger frameworks like React or Vue. By focusing on core functionalities, I aimed to keep the codebase minimal and maintainable.
+The primary motivation behind Sea JS was to create a simple, efficient, and easy-to-understand framework for managing state and rendering components. I wanted something that could handle basic UI tasks without the overhead of larger frameworks like React or Vue. By focusing on core functionalities, I aimed to keep the codebase minimal and maintainable, while prioritizing the absolutely smallest achievable bundle size.
+Here is an updated **Table of Contents** for your SeaJS documentation based on the latest changes:
+
+---
 
 ## Table of Contents
 
@@ -31,15 +34,18 @@ The primary motivation behind Sea JS was to create a simple, efficient, and easy
 - **[What's New](#whats-new)**
   - **[Recent Updates](#recent-updates)**
   - **[Why We Removed Our Implementation of Signals and Switched to RxJS](#why-we-removed-our-implementation-of-signals-and-switched-to-rxjs)**
+  - **[Why We Switched to a Function-Based `Store` and Refactored `createComponent`](#why-we-switched-to-a-function-based-store-and-refactored-createcomponent)**
   - **[Changes in the Codebase Regarding Signals and State Management](#changes-in-the-codebase-regarding-signals-and-state-management)**
 - **[Codebase Overview](#codebase-overview)**
 - **[Contribution](#contribution)**
 - **[License](#license)**
 
+---
+
 ## Key Features
 
 - **State Management**: Efficiently manage and update application state using a robust store mechanism that integrates with RxJS-based signals for reactive state management.
-- **Minimal Bundle Size**: Designed to be compact and performant. With a bundle size of just ***under 235 B***, SeaJS is the world's smallest frontend framework!
+- **Minimal Bundle Size**: Designed to be compact and performant. With a bundle size of just ***under 209 B***, SeaJS is the world's smallest frontend framework!
 
 ## Installation and Setup
 
@@ -231,22 +237,19 @@ createComponent(CounterComponent, { count: 0 });
 SeaJS now provides a RxJS based store for managing application state:
 
 ```javascript
-class Store {
-  constructor(initialState = {}) {
-    this.state = new BehaviorSubject(initialState);
-  }
-  getState() {
-    return this.state.getValue();
-  }
-  setState(newState) {
-    const currentState = this.state.getValue();
-    const updatedState = { ...currentState, ...newState };
-    this.state.next(updatedState);
-  }
-  subscribe(listener) {
-    return this.state.subscribe(listener);
-  }
-}
+  import { BehaviorSubject } from 'rxjs';
+
+  const Store = (initialState = {}) => {
+    const state = new BehaviorSubject(initialState);
+
+    return{
+      getState: () => state.getValue(),
+      setState: newState => state.next({...state.getValue() || {}, ...newState}),
+      subscribe: listener => state.subscribe(listener),
+    };
+  };
+
+  window.store = Store();
 ```
 
 ### 2. **The Create Components Function**
@@ -254,23 +257,14 @@ class Store {
 The `createComponent` function initializes a component with a given initial state and renders it:
 
 ```javascript
-export function createComponent(componentFn, initialState) {
-  window.store.setState(initialState);
-
-  function render() {
-    const state = window.store.getState();
-    const html = componentFn(state, window.store.setState.bind(window.store));
-    document.getElementById('root').innerHTML = html;
-  }
+export const createComponent = (fn, init) => {
+  store.setState(init);
+  const render = () => document.getElementById('root').innerHTML = fn(store.getState(), store.setState);
 
   render();
-  window.store.subscribe(render);
-}
+  store.subscribe(render);
+};
 ```
-
-If the `createComponent` function has not been refined recently or if there hasn't been a specific update to it, you might want to remove or revise that point in the "What's New" section. If you have specific details about any recent changes to `createComponent`, please let me know so I can include accurate information.
-
-If the function was not specifically updated but improvements were made in other areas, here’s a revised version:
 
 ## What's New
 
@@ -278,13 +272,19 @@ If the function was not specifically updated but improvements were made in other
 
 - **RxJS Integration for State Management**: The framework now incorporates RxJS-based signals for more dynamic and reactive state management. This integration enhances the ability to handle state changes and updates with greater flexibility and responsiveness.
 
-- **Bundle Size Optimization:** SeaJS has achieved significant reductions in bundle size through continuous optimization. The bundle size has decreased from 1037 bytes to 288 bytes, then to 245 bytes, and most recently to an impressive 235 bytes. This progression highlights our commitment to maximizing performance and efficiency. We have reduced the bundle size by a whopping **77.338%!**.
+- **Function-Based Store Implementation:** The `Store` class has been further refactored into a more streamlined and functional approach. This change simplifies state management, helped us reduce the bundle size and it improves overall performance, while still leveraging RxJS's powerful reactivity.
+
+- **`createComponent` Function Refactor**: The `createComponent` function has been refactored to integrate seamlessly with the new RxJS-based `Store` implementation. This refactor allows for automatic re-rendering upon state changes and simplifies how components are initialized and updated. The updated function ensures better synchronization between state management and UI rendering, enhancing both developer experience and application performance. It is also now simpler to facilitate even smaller bundle size.
+
+- **Bundle Size Optimization:** SeaJS has achieved significant reductions in bundle size through continuous optimization. The bundle size has decreased from 1037 bytes to 288 bytes, then to 245 bytes, and finally to an impressive 235 bytes. This was further improved by switching to a function based `Store` from the class based implementation, and a more aggressive setup for Rollup and Terser leading to another whopping 11.064% reduction in bundle size making it just under 209 bytes. This progression highlights our commitment to maximizing performance and efficiency. We have reduced the bundle size by a whopping **79.85%** from the original v0.0.1.
 
 - **Streamlined CLI**: The new `create-sea-app` CLI tool has been introduced to simplify project setup. This CLI offers a quick and easy way to generate new SeaJS projects with a single command, streamlining the development workflow.
 
 - **Updated Documentation**: The documentation has been enhanced to include detailed examples and usage instructions for the latest features. This update aims to provide clearer guidance and support for both new and existing users.
 
 - **Bug Fixes and Performance Enhancements**: Various minor bugs have been addressed, and performance optimizations have been made to ensure a smoother development experience and more efficient runtime performance.
+
+
 
 ### Why We Removed Our Implementation of Signals and Switched to RxJS
 
@@ -304,85 +304,142 @@ Recently, we made significant changes to our state management approach by removi
 
 In summary, the switch from our custom signals to RxJS and the interim use of a store-based approach without `window.signals` reflect our commitment to delivering a more reliable, efficient, and maintainable framework. These changes align with our goal of providing an optimal development experience while ensuring the robustness of SeaJS.
 
+
+### Why We Switched to a Function-Based `Store` and Refactored `createComponent`
+
+As part of our continuous effort to optimize the framework, we transitioned from a class-based `Store` implementation to a function-based one. Alongside this change, the `createComponent` function was also refactored. These updates were driven by the need for a more lightweight, efficient, and flexible state management system, as well as performance optimizations. Here’s why we made this switch:
+
+**1. Bundle Size Reduction**: The switch from a class-based `Store` to a functional approach led to a significant reduction in bundle size. The function-based `Store` is more compact and allowed us to eliminate unnecessary code. This optimization, coupled with additional changes to make Rollup and Terser more aggressive, cut down the bundle size by an impressive **11.064%**, contributing to SeaJS's ongoing goal of maximizing efficiency.
+
+**2. Simplification of State Management**: The function-based `Store` provides a simpler, more declarative way of handling state updates and subscriptions. This streamlined approach makes the code easier to maintain, reduces the cognitive load on developers, and enhances the clarity of state management logic.
+
+**3. Performance Optimizations**: Functional components are generally more performant, as they eliminate the need for class instantiation and can be more easily optimized by JavaScript engines. The function-based `Store` integrates seamlessly with RxJS and allows for more efficient handling of state changes and reactivity, further boosting performance.
+
+**4. Flexibility and Extensibility**: By switching to a function-based architecture, the `Store` and `createComponent` functions become more flexible and easier to extend. This allows developers to customize their state management logic with less effort and ensures that the framework can adapt to different use cases without being tied to a rigid class structure.
+
+**5. Better Integration with Functional Programming Paradigms**: The function-based `Store` aligns with modern JavaScript development practices, which favor functional programming paradigms. This update makes it easier to integrate SeaJS with other libraries and tools that follow a similar approach, resulting in a more cohesive and flexible development experience.
+
+**6. `createComponent` Refactor**: The `createComponent` function was refactored to complement the new function-based `Store`. This update not only simplifies how components are created and rendered but also optimizes re-rendering on state changes, ensuring smoother updates and reducing unnecessary performance overhead.
+
+In summary, these changes reflect our commitment to building a more efficient, lightweight, and maintainable framework while delivering optimal performance and modern development practices.
+
+---
+
 ### Changes in the Codebase Regarding Signals and State Management
 
-As part of our recent updates, several significant changes have been made to the codebase to improve the handling of signals and state management. The primary modifications focusing on state management and signals handling. The transition to RxJS simplifies the state management logic and enhances the framework's efficiency. Below is a detailed overview of these changes:
+As part of our recent updates, several significant changes have been made to the codebase to improve the handling of signals and state management. The primary modifications focus on simplifying state management and enhancing framework efficiency through the adoption of RxJS. Below is a detailed overview of these changes:
 
 **1. Original `window.signals` and `Store` Class**
 
-- **Original `window.signals`**: The initial implementation of `window.signals` was designed to manage reactive signals within the framework. However, it faced issues with unpredictability and inefficient re-renders, which impacted overall performance and usability.
+- **Original `window.signals`**: The initial implementation was designed to manage reactive signals but faced issues with unpredictability and inefficient re-renders.
 
    ```javascript
    window.signals = {
-    listeners: {},
-    subscribe(signalName, callback) {
-        if (!this.listeners[signalName]) {
-            this.listeners[signalName] = [];
-        }
-        this.listeners[signalName].push(callback);
-    },
-    emit(signalName, data) {
-        if (this.listeners[signalName]) {
-            this.listeners[signalName].forEach(callback => callback(data));
-        }
-    }
-  };
+       listeners: {},
+       subscribe(signalName, callback) {
+           if (!this.listeners[signalName]) {
+               this.listeners[signalName] = [];
+           }
+           this.listeners[signalName].push(callback);
+       },
+       emit(signalName, data) {
+           if (this.listeners[signalName]) {
+               this.listeners[signalName].forEach(callback => callback(data));
+           }
+       }
+   };
    ```
 
-- **Original `Store` Class**: The original `Store` class was implemented to manage application state but was tightly coupled with `window.signals`. This setup led to challenges with state updates and reactivity, contributing to performance inefficiencies.
+- **Original `Store` Class**: The previous implementation of the `Store` class was tightly coupled with `window.signals`, leading to performance inefficiencies.
 
    ```javascript
-    class Store {
-    constructor(initialState = {}) {
-      this.state = initialState;
-      this.listeners = [];
-    }
-    getState() {
-      return this.state;
-    }
-    setState(newState) {
-      this.state = { ...this.state, ...newState };
-      this.notify();
-    }
-    subscribe(listener) {
-      this.listeners.push(listener);
-    }
-    notify() {
-      this.listeners.forEach(listener => listener(this.state));
-    }
-  }
-  ```
+   class Store {
+       constructor(initialState = {}) {
+           this.state = initialState;
+           this.listeners = [];
+       }
+       getState() {
+           return this.state;
+       }
+       setState(newState) {
+           this.state = { ...this.state, ...newState };
+           this.notify();
+       }
+       subscribe(listener) {
+           this.listeners.push(listener);
+       }
+       notify() {
+           this.listeners.forEach(listener => listener(this.state));
+       }
+   }
+   ```
 
-**2. New Implementation Using RxJS**
+**2. Refactored RxJS-Based Version**
 
-- **New State Management with RxJS**: The new implementation utilizes RxJS’s `BehaviorSubject` for state management. This approach provides a more robust and efficient solution for handling state updates and subscriptions. The integration of RxJS enhances the reactivity and reliability of the framework. The `Store` class has been updated to work with RxJS. This class now leverages `BehaviorSubject` to manage state changes, improving overall performance and predictability.
+To address the limitations of the original implementation, we refactored the `Store` class to leverage RxJS. This class-based version utilizes `BehaviorSubject` for state management, providing a more robust and efficient solution:
 
    ```javascript
    import { BehaviorSubject } from 'rxjs';
-  class Store {
-    constructor(initialState = {}) {
-      this.state = new BehaviorSubject(initialState);
-    }
-    getState() {
-      return this.state.getValue();
-    }
-    setState(newState) {
-      const currentState = this.state.getValue();
-      const updatedState = { ...currentState, ...newState };
-      this.state.next(updatedState);
-    }
-    subscribe(listener) {
-      return this.state.subscribe(listener);
-    }
-  }
-  window.store = new Store();
-  ```
 
+   class Store {
+       constructor(initialState = {}) {
+           this.state = new BehaviorSubject(initialState);
+       }
+       getState() {
+           return this.state.getValue();
+       }
+       setState(newState) {
+           const currentState = this.state.getValue();
+           const updatedState = { ...currentState, ...newState };
+           this.state.next(updatedState);
+       }
+       subscribe(listener) {
+           return this.state.subscribe(listener);
+       }
+   }
 
-**3. Removal of `window.signals`**: The `window.signals` object has been removed from the codebase. RxJS’s `BehaviorSubject` now handles state updates and subscriptions, addressing the issues previously encountered with the custom signals implementation. For a temporary period of 5 days we relied on the unchanged, old implementation of `Store` to handle state management.
- 
+   window.store = new Store();
+   ```
 
-**5. Updated Documentation and Examples**: The documentation has been revised to include details on the new RxJS-based implementation and updated examples demonstrating the use of the new `Store` class.
+**3. New Functional Implementation**
+
+We have since transitioned to a more streamlined functional approach for the `Store`, simplifying the API and enhancing performance:
+
+   ```javascript
+   import { BehaviorSubject } from 'rxjs';
+
+   const Store = (initialState = {}) => {
+       const state = new BehaviorSubject(initialState);
+       return {
+           getState: () => state.getValue(),
+           setState: newState => state.next({ ...state.getValue() || {}, ...newState }),
+           subscribe: listener => state.subscribe(listener),
+       };
+   };
+
+   window.store = Store();
+   ```
+
+**4. Component Creation**: The `createComponent` function has also been updated to work with the new `Store` structure, facilitating easier reactivity and rendering:
+
+   ```javascript
+   export const createComponent = (fn, init) => {
+       store.setState(init);
+       const render = () => {
+           document.getElementById('root').innerHTML = fn(store.getState(), store.setState);
+       };
+       render();
+       store.subscribe(render);
+   };
+   ```
+
+**5. Removal of `window.signals`**: The `window.signals` object has been removed from the codebase. RxJS’s `BehaviorSubject` now handles state updates and subscriptions, effectively addressing previous issues with the custom signals implementation.
+
+**6. Bundle Size Optimization**: With additional changes made to make Rollup and Terser more aggressive, the bundle size has been further optimized, achieving a reduction of **11.064%** between v0.0.7 and 0.0.8. This contributes to the overall performance enhancements of SeaJS.
+
+**7. Updated Documentation and Examples**: The documentation has been revised to include details on the new RxJS-based implementation and updated examples demonstrating the use of the new `Store` class.
+
+These changes aim to improve the reliability, performance, and maintainability of SeaJS by leveraging RxJS for more advanced and efficient state management.
 
 These changes are aimed at improving the reliability, performance, and maintainability of SeaJS by leveraging RxJS for more advanced and efficient state management.
 

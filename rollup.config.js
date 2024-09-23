@@ -49,7 +49,12 @@ export default {
       compress: {
         drop_console: true,
         drop_debugger: true,
-        passes: 3,
+        negate_iife: true,
+        booleans_as_integers: true,
+        hoist_vars: true,
+        passes: 5,
+        ecma: 2020,
+        inline: 3,  
         pure_funcs: ['console.log'],
         dead_code: true,
         unused: true,
@@ -58,15 +63,18 @@ export default {
         sequences: true,
         conditionals: true,
         booleans: true,
+        toplevel: true,
+        unsafe: true,   
+        unsafe_comps: true,
+        unsafe_math: true,
+        unsafe_undefined: true,
       },
       mangle: {
         toplevel: true,
-        properties: {
-          regex: /^_/,
-        },
+        properties: true,
       },
-      output: {
-        comments: false,
+      format: {
+        ascii_only: true,
       },
       keep_fnames: false,
       keep_classnames: false,

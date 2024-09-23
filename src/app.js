@@ -2,11 +2,11 @@ import { createComponent } from "./framework.js";
 function CounterComponent(state, setState) {
   function increment() {
     setState({ count: state.count + 1 });
-    console.log(state.count + 1)
+    console.log(state.count + 1);
   }
   function decrement() {
     setState({ count: state.count - 1 });
-    console.log(state.count - 1)
+    console.log(state.count -1)
   }
   window.increment = increment;
   window.decrement = decrement;
